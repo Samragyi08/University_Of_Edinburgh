@@ -74,7 +74,7 @@ $programmes = $conn->query("SELECT ProgrammeID, ProgrammeName FROM Programmes OR
 
     <div class="panel">
         <h1 class="page-title">Student Details</h1>
-        <p class="small">Manage student registrations for programme interest.</p>
+        <p class="small">Manage student registrations, update mailing lists, and export data.</p>
     </div>
 
     <div class="panel">
