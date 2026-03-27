@@ -21,6 +21,7 @@ if ($search !== '') {
 
 $sql .= " ORDER BY Programmes.ProgrammeName";
 $result = $conn->query($sql);
+$resultCount = ($result) ? $result->num_rows : 0;
 
 $staffSql = "SELECT * FROM Staff ORDER BY StaffID LIMIT 3";
 $staffResult = $conn->query($staffSql);
@@ -88,7 +89,8 @@ $staffResult = $conn->query($staffSql);
 <section class="section" id="programmes">
     <div class="container">
         <h2 class="section-title">Available Programmes</h2>
-        <p class="section-text">Browse our available courses and find the one that matches your interests.</p>
+<p class="section-text">Browse our available courses and find the one that matches your interests.</p>
+<p class="small"><?php echo $resultCount; ?> programme(s) found</p>
 
         <div class="card-grid">
             <?php if ($result && $result->num_rows > 0) { ?>
@@ -107,7 +109,9 @@ $staffResult = $conn->query($staffSql);
                     </a>
                 <?php } ?>
             <?php } else { ?>
-                <p>No programmes found.</p>
+                <p style="text-align:center; font-weight:bold; padding:20px;">
+    No programmes found. Try a different search.
+</p>
             <?php } ?>
         </div>
     </div>
