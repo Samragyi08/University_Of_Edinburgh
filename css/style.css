@@ -365,6 +365,14 @@ table a:hover {
         margin-right: 12px;
     }
 
+    a:focus,
+button:focus,
+input:focus,
+select:focus {
+    outline: 3px solid #0b63ce;
+    outline-offset: 2px;
+}
+
     .hero h1,
     .detail-hero h1 {
         font-size: 34px;
