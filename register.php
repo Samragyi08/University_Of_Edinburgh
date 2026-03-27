@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ON DUPLICATE KEY UPDATE StudentName = '$name', Active = 1";
 
         if ($conn->query($sql)) {
-            $message = 'Your interest has been registered successfully.';
+            $message = "Thank you. Your interest has been successfully registered.";
         } else {
             $message = 'There was a problem saving your registration.';
             $type = 'error';
