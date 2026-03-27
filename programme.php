@@ -91,6 +91,13 @@ if ($modulesResult) {
                 </div>
             </section>
 
+<h2>Course Highlights</h2>
+<ul>
+<li>Learn through lectures and practical work</li>
+<li>Develop technical and problem-solving skills</li>
+<li>Prepare for industry careers</li>
+</ul>
+
             <section class="panel">
                 <h2>Modules by year</h2>
                 <?php if (!empty($modulesByYear)) { ?>
