@@ -194,7 +194,14 @@ button:hover,
     overflow: hidden;
     box-shadow: 0 4px 14px rgba(0,0,0,0.08);
 }
+.faculty-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
+.faculty-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.14);
+}
 .card {
     height: 100%;
     transition: 0.2s;
