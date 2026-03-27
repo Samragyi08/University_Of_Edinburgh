@@ -4,6 +4,43 @@
 $level = isset($_GET['level']) ? (int)$_GET['level'] : 0;
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
+function getProgrammeImage($row) {
+    if (!empty($row['Image'])) {
+        return $row['Image'];
+    }
+
+    $programmeName = isset($row['ProgrammeName']) ? $row['ProgrammeName'] : '';
+
+    $images = [
+        'BSc Computer Science' => 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80',
+        'BSc Software Engineering' => 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1200&q=80',
+        'BSc Cyber Security' => 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80',
+        'MSc Artificial Intelligence' => 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80',
+        'MSc Data Science' => 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80'
+    ];
+    if (isset($images[$programmeName])) {
+        return $images[$programmeName];
+    }
+
+    return 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80';
+}
+
+function getStaffImage($staffId) {
+    $images = [
+        1 => 'https://randomuser.me/api/portraits/women/44.jpg',
+        2 => 'https://randomuser.me/api/portraits/men/32.jpg',
+        3 => 'https://randomuser.me/api/portraits/women/68.jpg',
+        4 => 'https://randomuser.me/api/portraits/men/75.jpg',
+        5 => 'https://randomuser.me/api/portraits/women/65.jpg'
+    ];
+
+    if (isset($images[$staffId])) {
+        return $images[$staffId];
+    }
+
+    return 'https://randomuser.me/api/portraits/lego/1.jpg';
+}
+
 $sql = "SELECT Programmes.*, Levels.LevelName, Staff.Name AS LeaderName
         FROM Programmes
         LEFT JOIN Levels ON Programmes.LevelID = Levels.LevelID
@@ -16,7 +53,10 @@ if ($level > 0) {
 
 if ($search !== '') {
     $safeSearch = $conn->real_escape_string($search);
-    $sql .= " AND (Programmes.ProgrammeName LIKE '%$safeSearch%' OR Programmes.Description LIKE '%$safeSearch%')";
+    $sql .= " AND (
+                Programmes.ProgrammeName LIKE '%$safeSearch%'
+                OR Programmes.Description LIKE '%$safeSearch%'
+             )";
 }
 
 $sql .= " ORDER BY Programmes.ProgrammeName";
@@ -52,7 +92,10 @@ $staffResult = $conn->query($staffSql);
 <section class="hero">
     <div class="container">
         <h1>Explore your future at university</h1>
-        <p>Discover undergraduate and postgraduate programmes, explore modules by year, meet expert staff, and register your interest for updates and events.</p>
+        <p>
+            Discover undergraduate and postgraduate programmes, explore modules by year,
+            meet expert staff, and register your interest for updates and events.
+        </p>
         <div class="hero-buttons">
             <a class="btn-primary" href="#programmes">Explore Programmes</a>
             <a class="btn-secondary" href="#about">Learn More</a>
@@ -75,7 +118,13 @@ $staffResult = $conn->query($staffSql);
 
                 <div>
                     <label for="search">Search Programmes</label>
-                    <input type="text" name="search" id="search" placeholder="Search programmes" value="<?php echo htmlspecialchars($search); ?>">
+                    <input
+                        type="text"
+                        name="search"
+                        id="search"
+                        placeholder="Search programmes"
+                        value="<?php echo htmlspecialchars($search); ?>"
+                    >
                 </div>
 
                 <div class="search-button-wrap">
@@ -89,29 +138,53 @@ $staffResult = $conn->query($staffSql);
 <section class="section" id="programmes">
     <div class="container">
         <h2 class="section-title">Available Programmes</h2>
+
 <p class="section-text">Browse our available courses and find the one that matches your interests.</p>
 <p class="small"><?php echo $resultCount; ?> programme(s) found</p>
+
+        <p class="section-text">
+            Browse our available courses and find the one that matches your interests.
+        </p>
+(Added programme results count to homepage)
 
         <div class="card-grid">
             <?php if ($result && $result->num_rows > 0) { ?>
                 <?php while ($row = $result->fetch_assoc()) { ?>
                     <a class="card-link" href="programme.php?id=<?php echo $row['ProgrammeID']; ?>">
                         <article class="card">
-                            <img class="card-image" src="<?php echo htmlspecialchars($row['Image']); ?>" alt="<?php echo htmlspecialchars($row['ProgrammeName']); ?>">
+                            <img
+                                class="card-image"
+                                src="<?php echo htmlspecialchars(getProgrammeImage($row)); ?>"
+                                alt="<?php echo htmlspecialchars($row['ProgrammeName']); ?>"
+                            >
+
                             <div class="card-body">
-                                <div class="card-meta"><?php echo htmlspecialchars($row['LevelName']); ?></div>
+                                <div class="card-meta">
+                                    <?php echo htmlspecialchars($row['LevelName']); ?>
+                                </div>
+
                                 <h3><?php echo htmlspecialchars($row['ProgrammeName']); ?></h3>
+
                                 <p><?php echo htmlspecialchars($row['Description']); ?></p>
-                                <p class="small"><strong>Programme leader:</strong> <?php echo htmlspecialchars($row['LeaderName']); ?></p>
+
+                                <p class="small">
+                                    <strong>Programme leader:</strong>
+                                    <?php echo htmlspecialchars($row['LeaderName']); ?>
+                                </p>
+
                                 <span class="button card-button">View Programme</span>
                             </div>
                         </article>
                     </a>
                 <?php } ?>
             <?php } else { ?>
+<<<<<<< HEAD
                 <p style="text-align:center; font-weight:bold; padding:20px;">
     No programmes found. Try a different search.
 </p>
+=======
+                <p style="text-align:center; font-weight:bold; padding:20px;"> No programmes found. Try a different search.</p>
+>>>>>>> 42cb52a (Added programme results count to homepage)
             <?php } ?>
         </div>
     </div>
@@ -121,8 +194,18 @@ $staffResult = $conn->query($staffSql);
     <div class="container two-column">
         <div>
             <h2 class="section-title">About the University</h2>
-            <p>The University of Edinburgh website is designed to help prospective students explore programmes, learn about modules, and register interest easily.</p>
-            <p>The system supports course discovery, staff information, and student communication for future open days and updates.</p>
+            <p>
+                The University of Edinburgh website is designed to help prospective students
+                explore programmes, learn about modules, and register interest easily.
+            </p>
+            <p>
+                The system supports course discovery, staff information, and student communication
+                for future open days and updates.
+            </p>
+            <p>
+                The website is designed to help prospective students explore courses easily
+                and understand programme structures before applying.
+            </p>
         </div>
 
         <div class="info-box">
@@ -140,20 +223,30 @@ $staffResult = $conn->query($staffSql);
 <section class="section" id="faculty">
     <div class="container">
         <h2 class="section-title">Meet Our Faculty</h2>
-        <p class="section-text">Learn from experienced academic staff and programme leaders.</p>
+        <p class="section-text">
+            Learn from experienced academic staff and programme leaders.
+        </p>
 
         <div class="faculty-grid">
             <?php if ($staffResult && $staffResult->num_rows > 0) { ?>
                 <?php while ($staff = $staffResult->fetch_assoc()) { ?>
                     <div class="faculty-card">
-                        <img class="faculty-image" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" alt="<?php echo htmlspecialchars($staff['Name']); ?>">
+                        <img
+                            class="faculty-image"
+                            src="<?php echo htmlspecialchars(getStaffImage($staff['StaffID'])); ?>"
+                            alt="Faculty member <?php echo htmlspecialchars($staff['Name']); ?>"
+                        >
                         <div class="faculty-body">
                             <h3><?php echo htmlspecialchars($staff['Name']); ?></h3>
-                            <p class="small"><strong><?php echo htmlspecialchars($staff['JobTitle']); ?></strong></p>
+                            <p class="small">
+                                <strong><?php echo htmlspecialchars($staff['JobTitle']); ?></strong>
+                            </p>
                             <p><?php echo htmlspecialchars($staff['Bio']); ?></p>
                         </div>
                     </div>
                 <?php } ?>
+            <?php } else { ?>
+                <p>No faculty information available.</p>
             <?php } ?>
         </div>
     </div>
@@ -162,7 +255,10 @@ $staffResult = $conn->query($staffSql);
 <section class="section light-section">
     <div class="container">
         <h2 class="section-title">Administration Area</h2>
-        <p class="section-text">The admin area allows authorised staff to manage programmes, modules, and student registrations.</p>
+        <p class="section-text">
+            The admin area allows authorised staff to manage programmes, modules,
+            and student registrations.
+        </p>
 
         <div class="admin-feature-grid">
             <div class="info-box">
@@ -200,7 +296,7 @@ $staffResult = $conn->query($staffSql);
         <div>
             <h4>Contact</h4>
             <p>Email: admissions@example.ac.uk</p>
-            <p>Phone: +44 20 1234 5678</p>
+            <p>Phone: +45 12 34 56 78</p>
         </div>
     </div>
 </footer>
